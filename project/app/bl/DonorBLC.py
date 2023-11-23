@@ -17,3 +17,29 @@ class DonorBLC:
         session = DonorBLC.get_session()
         res = DonorRepository.adding_donor(session, args)
         return res
+
+    @staticmethod
+    def get_single_donor_info(args):
+        session = DonorBLC.get_session()
+        res = DonorRepository.get_single_donor_byid(args, session)
+        return res
+
+    @staticmethod
+    def updating_existing_donor(args):
+        session = DonorBLC.get_session()
+        exist = DonorRepository.get_single_donor_byid(args, session)
+        if exist:
+            res = DonorRepository.update_donor_byid(exist, args, session)
+            return res
+
+    @staticmethod
+    def get_all_donors():
+        session = DonorBLC.get_session()
+        donors = DonorRepository.get_all_donors(session)
+        return donors
+
+    @staticmethod
+    def delete_a_donor(args):
+        session = DonorBLC.get_session()
+
+        DonorRepository.delete_donor_byid(args, session)

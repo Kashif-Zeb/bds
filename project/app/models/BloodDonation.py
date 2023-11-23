@@ -9,9 +9,9 @@ from project.app.models.Donor import (
 class BloodDonation(db.Model):
     __tablename__ = "blooddonation"
     DonationID = db.Column(db.Integer, primary_key=True)
-    DonationDate = db.Column(db.String(25))
+    DonationDate = db.Column(db.Date)
     BloodType = db.Column(db.String(25))
-    DonationStatus = db.Column(db.String(50), unique=True, nullable=False)
+    DonationStatus = db.Column(db.String(50), nullable=False)
     HemoglobinLevel = db.Column(db.String(25))
     donors = db.relationship(
         "Donor",

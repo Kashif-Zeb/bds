@@ -1,3 +1,4 @@
+import datetime
 from project.app.db import db
 
 
@@ -51,7 +52,7 @@ class Donor(db.Model):
     Address = db.Column(db.String(50))
     BloodType = db.Column(db.String(50))
     Gender = db.Column(db.String(50))
-    DateOfBirth = db.Column(db.String(50))
+    DateOfBirth = db.Column(db.Date)
     Email = db.Column(db.String(50), unique=True)
     ContactNumber = db.Column(db.String(50), unique=True, nullable=False)
 
