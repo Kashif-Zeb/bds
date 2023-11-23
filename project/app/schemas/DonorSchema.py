@@ -1,10 +1,15 @@
 from marshmallow import (
     Schema,
+    ValidationError,
     fields,
+    pre_dump,
     validate,
+    pre_load,
+    validates,
 )
 
 from enum import Enum
+from datetime import datetime
 
 
 class BloodType(Enum):
@@ -36,9 +41,29 @@ class DonorSchema(Schema):
         validate=validate.OneOf(["O+", "A+", "B+", "AB+", "O-", "A-", "b-", "AB-"])
     )
     Gender = fields.String(validate=validate.OneOf(["Male", "Female"]))
-    DateOfBirth = fields.Date(format="%Y-%m-%d", required=True)
+    DateOfBirth = fields.DateTime(format="%Y-%m-%d", required=True)
     Email = fields.Email(required=True)
     ContactNumber = fields.String(
         validate=validate.Length(min=10, max=11),
         required=True,
     )
+
+    @validates("ContactNumber")
+    def validate_phone_number(self, value):
+        if not value.isdigit() or len(value) != 11:
+            raise ValidationError(
+                "Phone number must contain 10 digits and no other characters."
+            )
+
+    # @pre_dump()
+    # def check_DateOfBirth(self, data: dict, **kwargs) -> dict:
+    #     if "DateOfBirth" in data and isinstance(data["DateOfBirth"], str):
+    #         try:
+    #             # Checking the date format
+    #             data["DateOfBirth"] = datetime.strptime(
+    #                 data["DateOfBirth"], "%Y-%m-%d"
+    #             ).date()
+    #         except ValueError as e:
+    #             # Handle the exception
+    #             data["DateOfBirth"] = None  # or some default value
+    #     return data

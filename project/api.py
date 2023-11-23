@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from project.app.db import db
 from project.blueprints.donor import bp as donor
-
+from project.blueprints.blood_donation import bp as blood_donation
 from project import config
 import os
 
@@ -41,6 +41,7 @@ def create_app():
     # with app.app_context():
     #     db.create_all()
     app.register_blueprint(donor)
+    app.register_blueprint(blood_donation)
     # app.register_blueprint(department)
     # app.register_blueprint(course)
     # app.register_blueprint(teacher)
