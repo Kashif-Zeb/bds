@@ -76,15 +76,31 @@ def updating_blooddonation(args):
         "DonationStatus": fields.String(
             validate=validate.OneOf(["Approved", "Rejected"]), required=True
         ),
+        "BloodBankID": fields.Integer(),
     },
     location="json",
 )
 def update_donationstatus(args):
     """updating the blooddonation status"""
-    if len(args.get("DonationID")) == 0:
+    if not len(args.get("DonationID")):
         return (
             jsonify({"DonationID": "Enter ths IDs "}),
             HTTPStatus.UNPROCESSABLE_ENTITY,
         )
     res = BloodDonationBLC.updating_donationstatus(args)
     return res
+
+
+@bp.route("/api/search_status", methods=["GET"])
+@use_args({"DonationStatus": fields.String()}, location="query")
+def search_status(args):
+    """get all blooddoantion by status"""
+    BD = BloodDonationBLC.get_search_status(args)
+    if not BD:
+        return (
+            jsonify({"message": "records not found"}),
+            HTTPStatus.UNPROCESSABLE_ENTITY,
+        )
+    std = BloodDonationSchema(many=True)
+    result = std.dump(BD)
+    return result, HTTPStatus.OK

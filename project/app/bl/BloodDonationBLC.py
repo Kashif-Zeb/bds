@@ -2,6 +2,7 @@ from project.app.repositories.BloodDonationRepository import BloodDonationReposi
 from project.app.db import db
 from flask import request, jsonify
 from project.app.repositories.DonorRepository import DonorRepository
+from project.app.repositories.BloodBankRepository import BloodBankRepository
 
 
 class BloodDonationBLC:
@@ -12,20 +13,24 @@ class BloodDonationBLC:
     @staticmethod
     def creating_blooddonation(args):
         session = BloodDonationBLC.get_session()
-
+        # bloodbank = BloodBankRepository.get_single_bb_byid(session, args)
         donor = DonorRepository.get_single_donor_byid(args, session)
         # breakpoint()
+        # if bloodbank:
         if donor:
             donorID = args.get("DonorID")
+            # bloodbankID = args.get("BloodBankID")
             blooddonation = BloodDonationRepository.adding_blooddonation(
                 args, session, donor
             )
             # blooddonation.donors.append(donor)
             # breakpoint()
             blooddonation.DonorID = donorID
+            # blooddonation.BloodBankID = bloodbankID
             # blooddonation(args.get("DonorID"))
-
             return blooddonation
+        raise ("first provide the donor info")
+        # raise ("bloodbank not found")
 
     @staticmethod
     def getting_blooddonation(args):
@@ -53,5 +58,12 @@ class BloodDonationBLC:
     @staticmethod
     def updating_donationstatus(args):
         session = BloodDonationBLC.get_session()
-        res = BloodDonationRepository.update_the_status(args, session)
+        bloodbank = BloodBankRepository.get_single_bb_byid(session, args)
+        res = BloodDonationRepository.update_the_status(args, session, bloodbank)
         return res
+
+    @staticmethod
+    def get_search_status(args):
+        session = BloodDonationBLC.get_session()
+        status = BloodDonationRepository.getting_search_status(args, session)
+        return status

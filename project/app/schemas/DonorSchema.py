@@ -54,16 +54,3 @@ class DonorSchema(Schema):
             raise ValidationError(
                 "Phone number must contain 10 digits and no other characters."
             )
-
-    # @pre_dump()
-    # def check_DateOfBirth(self, data: dict, **kwargs) -> dict:
-    #     if "DateOfBirth" in data and isinstance(data["DateOfBirth"], str):
-    #         try:
-    #             # Checking the date format
-    #             data["DateOfBirth"] = datetime.strptime(
-    #                 data["DateOfBirth"], "%Y-%m-%d"
-    #             ).date()
-    #         except ValueError as e:
-    #             # Handle the exception
-    #             data["DateOfBirth"] = None  # or some default value
-    #     return data

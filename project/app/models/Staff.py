@@ -1,6 +1,6 @@
 from project.app.db import db
 
-from project.app.models.Donor import staff_bloodDonation
+from project.app.models.Donor import staff_bloodDonation, staff_registeration
 
 
 class Staff(db.Model):
@@ -18,9 +18,8 @@ class Staff(db.Model):
         back_populates="staffs",
     )
 
-    # subjects = db.relationship(
-    #     "project.app.models.Subject.Subject",
-    #     back_populates="course",
-    #     primaryjoin="Subject.course_id==Course.id",
-    #     foreign_keys="Subject.course_id",
-    # )
+    registerations = db.relationship(
+        "Registeration",
+        secondary=staff_registeration,
+        back_populates="staffs",
+    )

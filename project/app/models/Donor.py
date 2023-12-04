@@ -42,6 +42,16 @@ staff_bloodDonation = db.Table(
         primary_key=True,
     ),
 )
+staff_registeration = db.Table(
+    "staff_registeration",
+    db.Column("staff_id", db.Integer, db.ForeignKey("staff.StaffID"), primary_key=True),
+    db.Column(
+        "reg_id",
+        db.Integer,
+        db.ForeignKey("registeration.Reg_ID"),
+        primary_key=True,
+    ),
+)
 
 
 class Donor(db.Model):

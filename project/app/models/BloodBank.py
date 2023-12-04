@@ -9,7 +9,7 @@ class BloodBank(db.Model):
     Location = db.Column(db.String(25))
     Email = db.Column(db.String(50), unique=True)
     ContactNumber = db.Column(db.String(50), unique=True, nullable=False)
-    AvailableBloodTypes = db.Column(db.String(25))
+    # AvailableBloodTypes = db.Column(db.String(25))
 
     blooddonations = db.relationship(
         "BloodDonation",
