@@ -13,7 +13,7 @@ from project.app.repositories.DonorRepository import DonorRepository
 from flask import Blueprint, current_app
 from marshmallow import post_dump, pre_dump
 from project.app.db import db
-
+from project.blueprints.staff import role_required
 from marshmallow import fields, validate
 from project.app.bl.DonorBLC import DonorBLC
 from werkzeug.utils import secure_filename
@@ -24,6 +24,7 @@ bp = Blueprint("donor", __name__)
 
 
 @bp.route("/api/donors", methods=["POST"])
+@role_required
 @use_args(DonorSchema, location="json")
 def create_donor(args):
     """Create a new donor"""
@@ -92,3 +93,16 @@ def delete_donors(args):
         )
     except Exception as e:
         return jsonify({"message": str(e)}), HTTPStatus.UNPROCESSABLE_ENTITY
+
+
+@bp.route("/api/search_donor", methods=["POST"])
+@use_args(
+    {"search": fields.String()},
+    location="json",
+)
+def search_donor(args):
+    """Search for a donor by name or email"""
+    res = DonorBLC.searching_donor(args)
+    std = DonorSchema(many=True)
+    ans = std.dump(res)
+    return ans

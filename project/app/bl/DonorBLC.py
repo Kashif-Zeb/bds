@@ -43,3 +43,9 @@ class DonorBLC:
         session = DonorBLC.get_session()
 
         DonorRepository.delete_donor_byid(args, session)
+
+    @staticmethod
+    def searching_donor(args):
+        session = DonorBLC.get_session()
+        result = DonorRepository.search_donors(args, session)
+        return result

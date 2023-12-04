@@ -1,4 +1,4 @@
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 from project.app.db import db
 
 from project.app.models.Donor import Donor
@@ -62,3 +62,22 @@ class DonorRepository:
             session.commit()
         else:
             raise Exception("No record found.")
+
+    @staticmethod
+    def search_donors(args, session):
+        # search = (
+        #     session.query(Donor.FirstName)
+        #     .filter(Donor.FirstName.like(f"%{args.get('search')}%"))
+        #     .union(
+        #         session.query(Donor.Email).filter(
+        #             Donor.Email.like(f"%{args.get('Email')}%")
+        #         )
+        #     )
+        # ).all()
+        search = session.query(Donor.FirstName).filter(
+            or_(
+                Donor.FirstName.ilike(f"%{args.get('search')}%"),
+                Donor.Email.ilike(f"%{args.get('search')}%"),
+            )
+        )
+        return search.all()

@@ -9,8 +9,10 @@ class BloodDonationRepository:
     @staticmethod
     def adding_blooddonation(args, session, donor):
         args.pop("DonorID")
+        # args.pop("BloodBankID")
         blooddonation = BloodDonation(**args)
         blooddonation.donors.append(donor)
+        # blooddonation.bloodbanks.append(bloodbank)
         session.add(blooddonation)
         session.commit()
         bloodD = (
@@ -50,7 +52,7 @@ class BloodDonationRepository:
         return res
 
     @staticmethod
-    def update_the_status(args, session):
+    def update_the_status(args, session, bloodbank):
         res = (
             session.query(BloodDonation)
             .filter(BloodDonation.DonationID.in_(args.get("DonationID")))
@@ -66,6 +68,20 @@ class BloodDonationRepository:
         else:
             for i in res:
                 i.DonationStatus = args.get("DonationStatus")
+                # session.commit()
+                if i.DonationStatus == "Approved":
+                    i.bloodbanks.append(bloodbank)
+            try:
                 session.commit()
+            except:
+                session.rollback()
+            return {"message": "Donation status updated "}, HTTPStatus.OK
 
-            return {"message": "Donation status updated"}, HTTPStatus.OK
+    @staticmethod
+    def getting_search_status(args, session):
+        res = (
+            session.query(BloodDonation)
+            .filter(BloodDonation.DonationStatus == args.get("DonationStatus"))
+            .all()
+        )
+        return res

@@ -20,6 +20,7 @@ class BloodDonationSchema(Schema):
         required=True,
     )
     DonorID = fields.Integer(required=True)
+    # BloodBankID = fields.Integer(required=True)
 
 
 class schema_to_get_BD_donor(BloodDonationSchema):

@@ -1,24 +1,50 @@
 from marshmallow import (
     Schema,
+    ValidationError,
     fields,
     validate,
+    validates,
 )
 
 
 class StaffSchema(Schema):
-    name = fields.String(
+    StaffID = fields.Integer()
+    FirstName = fields.String(
         validate=validate.Length(min=3, max=25),
         required=True,
-        error_messages={"required": "Name field cannot be empty."},
     )
-    email = fields.Email(required=False)
-    address = fields.String(
+    LastName = fields.String(
+        validate=validate.Length(min=3, max=25),
         required=True,
-        allowed_none=True,
-        error_messages={"required": "Address field cannot be empty."},
     )
-    number = fields.String(
-        validate=validate.Length(min=5, max=20),
+    Email = fields.Email(required=True)
+    Position = fields.String(
+        validate=validate.Length(min=3, max=25),
         required=True,
-        error_messages={"required": "Number field cannot be empty."},
     )
+    ContactNumber = fields.String(
+        validate=validate.Length(11),
+        required=True,
+    )
+
+    @validates
+    def validates_ContactNumber(self, value):
+        if not value.isdigit() or len(value) != 11:
+            raise ValidationError(
+                "Phone number must contain 10 digits and no other characters."
+            )
+
+
+class update_schema_staff(StaffSchema):
+    StaffID = fields.Integer(required=True)
+
+
+class RegisterationSchema(Schema):
+    Username = fields.String(required=True)
+    Email = fields.Email(required=True)
+    Password = fields.String(required=True)
+
+
+class Login(Schema):
+    Email = fields.Email(required=True)
+    Password = fields.String(required=True)

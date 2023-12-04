@@ -4,6 +4,8 @@ from flask_jwt_extended import JWTManager
 from project.app.db import db
 from project.blueprints.donor import bp as donor
 from project.blueprints.blood_donation import bp as blood_donation
+from project.blueprints.bloodbank import bp as blood_bank
+from project.blueprints.staff import bp as staff
 from project import config
 import os
 
@@ -42,7 +44,7 @@ def create_app():
     #     db.create_all()
     app.register_blueprint(donor)
     app.register_blueprint(blood_donation)
-    # app.register_blueprint(department)
-    # app.register_blueprint(course)
+    app.register_blueprint(blood_bank)
+    app.register_blueprint(staff)
     # app.register_blueprint(teacher)
     return app
